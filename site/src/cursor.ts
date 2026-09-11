@@ -28,13 +28,14 @@ export function initCursor() {
     lastX = pos.x; lastT = now;
     swing(gsap.utils.clamp(-40, 40, -vx * 30));
     tilt(gsap.utils.clamp(-10, 10, vx * 6));
-    const target = (e.target as HTMLElement).closest<HTMLElement>('[data-cursor]');
+    const t = e.target as HTMLElement | null;
+    const target = t?.closest ? t.closest<HTMLElement>('[data-cursor]') : null;
     if (target) {
       label.textContent = target.dataset.cursor || '';
       el.classList.add('is-hover'); zoom(1.45);
     } else { el.classList.remove('is-hover'); zoom(1); }
     // dark ground: inside the fall or the footer
-    const dark = (e.target as HTMLElement).closest('.fall, .bottom, .mcard__back');
+    const dark = t?.closest ? t.closest('.fall, .bottom, .mcard__back') : null;
     el.classList.toggle('is-dark', !!dark);
   }, { passive: true });
 
