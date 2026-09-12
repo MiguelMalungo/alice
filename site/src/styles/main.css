@@ -289,34 +289,48 @@ body.no-webgl .fall { height: 60vh; }
 .typeset .ch { opacity: 0; display: inline-block; }
 .typeset.is-done .ch { opacity: 1; }
 
-/* ---------- Photo strips: polaroids on a string ---------- */
-.strip { position: relative; overflow: hidden; margin-top: clamp(56px, 8vh, 96px); padding: 24px 0 8px; }
-.strip__track { position: relative; display: flex; gap: 28px; padding: 0 6vw; width: max-content; will-change: transform; }
+/* ---------- Photo strips: polaroids on a string, scrolled sideways ---------- */
+.strip-wrap { position: relative; margin-top: clamp(56px, 8vh, 96px); }
+.strip {
+  position: relative; overflow-x: auto; overflow-y: hidden; padding: 24px 0 14px; cursor: grab;
+  scroll-snap-type: x proximity; scrollbar-width: none; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch;
+}
+.strip::-webkit-scrollbar { display: none; }
+.strip.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+.strip.is-dragging .polaroid { pointer-events: none; }
+.strip__track { position: relative; display: flex; gap: 28px; padding: 0 6vw; width: max-content; }
 .strip__track::before { /* the string the polaroids hang from */
   content: ""; position: absolute; left: -100vw; right: -100vw; top: -6px; height: 1px; background: var(--rule); }
-.strip__hint { display: none; }
-/* on touch screens the strip is a real swipe carousel */
-@media (hover: none), (pointer: coarse) {
-  .strip { overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; overscroll-behavior-x: contain; padding-bottom: 14px; }
-  .strip::-webkit-scrollbar { display: none; }
-  .strip__track { transform: none !important; padding: 0 24px; }
-  .strip__track::after { content: ""; flex: none; width: 1px; } /* keeps the right padding inside the scroll area */
-  .polaroid { scroll-snap-align: center; }
-  .strip__hint { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 6px; font-family: var(--sc); letter-spacing: .18em; font-size: 12px; color: var(--ink-2); }
-  .strip__hint span { display: inline-block; }
-}
+.strip__track::after { content: ""; flex: none; width: 1px; }
 .polaroid {
   position: relative; margin: 0; width: 240px; flex: none; padding: 12px 12px 14px; background: var(--parchment-2);
-  border: 1px solid var(--parchment-edge); border-radius: 4px; box-shadow: var(--shadow); transform-origin: 50% -10px;
+  border: 1px solid var(--parchment-edge); border-radius: 4px; box-shadow: var(--shadow); transform-origin: 50% -10px; scroll-snap-align: center;
+  user-select: none; -webkit-user-drag: none;
 }
 .polaroid::before { /* the peg on the string */
   content: ""; position: absolute; left: 50%; top: -22px; width: 10px; height: 26px; border-radius: 3px; background: linear-gradient(#e0c48f, #b8893f); transform: translateX(-50%); box-shadow: 0 2px 3px rgba(0,0,0,.25);
 }
-.polaroid img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 2px; display: block; }
+.polaroid img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 2px; display: block; pointer-events: none; }
 .polaroid figcaption { font-family: var(--display); font-style: italic; font-size: 15px; color: var(--ink-2); text-align: center; margin-top: 10px; line-height: 1.25; }
 .polaroid:nth-child(odd) { transform: rotate(-2.2deg); }
 .polaroid:nth-child(even) { transform: rotate(1.8deg) translateY(10px); }
 .polaroid:nth-child(3n) { transform: rotate(2.6deg) translateY(-4px); }
+.strip__hint { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 4px; font-family: var(--sc); letter-spacing: .18em; font-size: 12px; color: var(--ink-2); }
+.strip__hint span { display: inline-block; }
+.strip__nav {
+  position: absolute; top: 50%; z-index: 3; width: 46px; height: 46px; border-radius: 50%; cursor: pointer; transform: translateY(-50%);
+  background: var(--parchment); color: var(--umber); border: 1px solid var(--parchment-edge); display: grid; place-items: center;
+  box-shadow: inset 0 0 0 3px var(--parchment-2), inset 0 0 0 4px var(--parchment-edge), 0 10px 20px -12px rgba(62,42,28,.6);
+  transition: opacity .25s, transform .25s var(--ease-out);
+}
+.strip__nav svg { width: 20px; height: 20px; }
+.strip__nav--l { left: 14px; } .strip__nav--r { right: 14px; }
+.strip__nav:hover { transform: translateY(-50%) scale(1.1); }
+.strip__nav[disabled] { opacity: .3; cursor: default; }
+@media (hover: none), (pointer: coarse) {
+  .strip__nav { display: none; }              /* thumbs swipe; arrows only get in the way */
+  .strip__track { padding: 0 24px; }
+}
 
 /* ---------- Menu overlay ---------- */
 .menu-overlay { position: fixed; inset: 0; z-index: 86; background: rgba(21, 14, 9, .88); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); display: grid; }

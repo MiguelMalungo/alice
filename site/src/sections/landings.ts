@@ -202,33 +202,57 @@ export function initChrome() {
   });
 }
 
-/* ---------- Photo strips: drift with the scroll on desktop, swipe on touch ---------- */
+/* ---------- Photo strips: a horizontal scroller you can drag, swipe, wheel or arrow through ---------- */
 export function initStrips() {
-  document.querySelectorAll<HTMLElement>('.strip').forEach((strip) => {
-    const track = strip.querySelector<HTMLElement>('.strip__track')!;
-    const polaroids = strip.querySelectorAll('.polaroid');
-    if (!reducedMotion) {
-      // polaroids swing a little on their pegs as they arrive
-      gsap.from(polaroids, { rotation: (i) => (i % 2 ? 9 : -9), transformOrigin: '50% -10px', duration: 1.6, ease: 'elastic.out(1, 0.45)', stagger: 0.08,
-        scrollTrigger: { trigger: strip, start: 'top 85%', once: true } });
-    }
-    if (isTouch) {
-      // native swipe carousel; nudge it once so people see it moves, and bounce the arrow in the hint
-      const arrow = strip.querySelector('.strip__hint span');
-      if (arrow && !reducedMotion) gsap.to(arrow, { x: 6, duration: 0.7, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-      if (!reducedMotion) ScrollTrigger.create({ trigger: strip, start: 'top 75%', once: true, onEnter: () => {
-        gsap.to(strip, { scrollLeft: 70, duration: 0.6, ease: 'power2.out', delay: 0.5, yoyo: true, repeat: 1, repeatDelay: 0.2 });
-      } });
-      return;
-    }
-    const dir = Number(strip.dataset.dir) || 1;
-    const place = () => {
-      const overflow = Math.max(track.scrollWidth - strip.clientWidth, 0);
-      return { from: dir > 0 ? -overflow : 0, to: dir > 0 ? 0 : -overflow };
+  document.querySelectorAll<HTMLElement>('.strip-wrap').forEach((wrap) => {
+    const strip = wrap.querySelector<HTMLElement>('.strip')!;
+    const polaroids = strip.querySelectorAll<HTMLElement>('.polaroid');
+    const prev = wrap.querySelector<HTMLButtonElement>('.strip__nav--l');
+    const next = wrap.querySelector<HTMLButtonElement>('.strip__nav--r');
+    const arrow = wrap.querySelector('.strip__hint span');
+    const step = () => (polaroids[0]?.offsetWidth || 240) + 28;
+    const maxLeft = () => strip.scrollWidth - strip.clientWidth;
+
+    const updateNav = () => {
+      if (prev) prev.disabled = strip.scrollLeft <= 2;
+      if (next) next.disabled = strip.scrollLeft >= maxLeft() - 2;
     };
-    if (reducedMotion) { gsap.set(track, { x: () => place().from + (place().to - place().from) / 2 }); return; }
-    gsap.fromTo(track, { x: () => place().from }, { x: () => place().to, ease: 'none',
-      scrollTrigger: { trigger: strip, start: 'top bottom', end: 'bottom top', scrub: 0.8, invalidateOnRefresh: true } });
+    strip.addEventListener('scroll', updateNav, { passive: true });
+    addEventListener('resize', updateNav);
+    updateNav();
+
+    const glide = (to: number) => gsap.to(strip, { scrollLeft: gsap.utils.clamp(0, maxLeft(), to), duration: 0.7, ease: 'power3.out', overwrite: true });
+    prev?.addEventListener('click', () => glide(strip.scrollLeft - step() * 2));
+    next?.addEventListener('click', () => glide(strip.scrollLeft + step() * 2));
+
+    // mouse drag to scroll, with a little inertia on release
+    let dragging = false, startX = 0, startLeft = 0, lastX = 0, lastT = 0, vx = 0;
+    strip.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse') return;               // touch already scrolls natively
+      dragging = true; startX = lastX = e.clientX; startLeft = strip.scrollLeft; lastT = performance.now(); vx = 0;
+      strip.classList.add('is-dragging'); strip.setPointerCapture(e.pointerId); gsap.killTweensOf(strip);
+    });
+    strip.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const now = performance.now(); vx = (e.clientX - lastX) / Math.max(now - lastT, 1); lastX = e.clientX; lastT = now;
+      strip.scrollLeft = startLeft - (e.clientX - startX);
+    });
+    const release = () => {
+      if (!dragging) return; dragging = false; strip.classList.remove('is-dragging');
+      glide(strip.scrollLeft - vx * 260);
+    };
+    strip.addEventListener('pointerup', release); strip.addEventListener('pointercancel', release);
+    // a sideways trackpad gesture scrolls the strip natively; Lenis must not see it
+    strip.addEventListener('wheel', (e) => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) e.stopPropagation(); }, { passive: true });
+
+    if (reducedMotion) return;
+    gsap.from(polaroids, { rotation: (i) => (i % 2 ? 9 : -9), transformOrigin: '50% -10px', duration: 1.6, ease: 'elastic.out(1, 0.45)', stagger: 0.08,
+      scrollTrigger: { trigger: strip, start: 'top 85%', once: true } });
+    if (arrow) gsap.to(arrow, { x: 6, duration: 0.7, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    // nudge once so people see it moves
+    ScrollTrigger.create({ trigger: strip, start: 'top 75%', once: true, onEnter: () => {
+      gsap.to(strip, { scrollLeft: 70, duration: 0.6, ease: 'power2.out', delay: 0.5, yoyo: true, repeat: 1, repeatDelay: 0.2 });
+    } });
   });
 }
 
