@@ -147,7 +147,8 @@ export function initTunnel() {
     drifts.push({ mesh, rot: new THREE.Vector3(rng(-0.4, 0.4), rng(-0.4, 0.4), rng(-0.3, 0.3)), bob: rng(0.1, 0.4), phase: rng(0, 6), z, r, a });
   }
 
-  // the real drinks: background-free photos on camera-facing cards, lit by the lamp
+  // the real drinks: background-free photos on camera-facing cards, lit by the lamp.
+  // Every fall window gets the full set once, laid out along the stretch of tunnel that window scrolls through.
   const cutouts = [
     { file: 'cookie-coffee', w: 1150, h: 1197, size: 2.0 },
     { file: 'latte-art', w: 914, h: 960, size: 1.7 },
@@ -155,24 +156,42 @@ export function initTunnel() {
     { file: 'queen-pancake', w: 943, h: 857, size: 2.2 },
     { file: 'rose-latte', w: 1018, h: 770, size: 1.8 },
   ];
-  const billboards: { mesh: THREE.Mesh; phase: number; sway: number }[] = [];
+  const billboards: { mesh: THREE.Mesh; phase: number; sway: number; fall: number; slot: number; a: number; r: number }[] = [];
   const loader = new THREE.TextureLoader();
-  cutouts.forEach((c, ci) => {
+  const cutMats = cutouts.map((c) => {
     const tex = loader.load(`${import.meta.env.BASE_URL}img/cut/${c.file}.webp`);
     tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
-    const mat = new THREE.MeshStandardMaterial({ map: tex, transparent: true, alphaTest: 0.08, roughness: 0.85, metalness: 0, side: THREE.DoubleSide, depthWrite: false });
-    const geo = new THREE.PlaneGeometry(c.size * (c.w / c.h), c.size);
-    for (let k = 0; k < 3; k++) {
-      const mesh = new THREE.Mesh(geo, mat);
-      const seg = (LENGTH - 30) / (cutouts.length * 3);          // spread them evenly down the hole
-      const z = -(14 + (ci * 3 + k) * seg + rng(0, seg * 0.6));
-      const a = rng(0, Math.PI * 2), r = rng(1.2, RADIUS - 2.4);
-      mesh.position.set(Math.cos(a) * r, Math.sin(a) * r, z);
+    return new THREE.MeshStandardMaterial({ map: tex, transparent: true, alphaTest: 0.08, roughness: 0.85, metalness: 0, side: THREE.DoubleSide, depthWrite: false });
+  });
+  falls.forEach((_, fi) => {
+    // a different order and side for each fall so the second descent doesn't replay the first
+    const orders = [[0, 2, 3, 1, 4], [3, 4, 0, 2, 1]];
+    const order = orders[fi % orders.length];
+    order.forEach((ci, slot) => {
+      const c = cutouts[ci];
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(c.size * (c.w / c.h), c.size), cutMats[ci]);
       mesh.renderOrder = 2;
       scene.add(mesh);
-      billboards.push({ mesh, phase: rng(0, 6), sway: rng(0.05, 0.12) });
-    }
+      billboards.push({ mesh, phase: rng(0, 6), sway: rng(0.05, 0.12), fall: fi, slot,
+        a: (slot / cutouts.length) * Math.PI * 2 + fi * 0.9 + rng(-0.3, 0.3), r: rng(1.5, 2.6) });
+    });
   });
+  // where along the hole each fall window looks: camera z at a given scroll position
+  const zAtScroll = (y: number) => -(y / Math.max(ScrollTrigger.maxScroll(window), 1)) * (LENGTH - 20);
+  const layoutBillboards = () => {
+    falls.forEach((f, fi) => {
+      const top = f.offsetTop, bottom = top + f.offsetHeight;
+      const zFrom = zAtScroll(top - innerHeight * 0.2) - 7;      // just ahead of the camera as the window opens
+      const zTo = zAtScroll(bottom - innerHeight * 0.7) - 5;     // still ahead of it as the window closes
+      const mine = billboards.filter((b) => b.fall === fi);
+      mine.forEach((b) => {
+        const t = (b.slot + 0.5) / mine.length;
+        b.mesh.position.set(Math.cos(b.a) * b.r, Math.sin(b.a) * b.r, zFrom + (zTo - zFrom) * t);
+      });
+    });
+  };
+  ScrollTrigger.addEventListener('refresh', layoutBillboards);
+  layoutBillboards();
 
   // gold motes
   const moteGeo = new THREE.BufferGeometry();
