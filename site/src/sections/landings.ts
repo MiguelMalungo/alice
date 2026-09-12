@@ -1,7 +1,7 @@
 import { Draggable } from 'gsap/Draggable';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
-import { gsap, ScrollTrigger, isTouch, reducedMotion, velocity } from '../scroll';
+import { gsap, ScrollTrigger, isTouch, reducedMotion, velocity, stopScroll, startScroll } from '../scroll';
 import { burst } from '../ui/sparkle';
 
 gsap.registerPlugin(Draggable, InertiaPlugin, MotionPathPlugin);
@@ -200,4 +200,46 @@ export function initChrome() {
   document.querySelectorAll('.fall, .bottom').forEach((f) => {
     ScrollTrigger.create({ trigger: f, start: 'top 50%', end: 'bottom 50%', onToggle: (s) => { nav.classList.toggle('is-dark', s.isActive); bar.classList.toggle('is-dark', s.isActive); } });
   });
+}
+
+/* ---------- Photo strips: drift sideways as the section scrolls ---------- */
+export function initStrips() {
+  document.querySelectorAll<HTMLElement>('.strip').forEach((strip) => {
+    const track = strip.querySelector<HTMLElement>('.strip__track')!;
+    const dir = Number(strip.dataset.dir) || 1;
+    const place = () => {
+      const overflow = Math.max(track.scrollWidth - strip.clientWidth, 0);
+      return { from: dir > 0 ? -overflow : 0, to: dir > 0 ? 0 : -overflow };
+    };
+    if (reducedMotion) { gsap.set(track, { x: () => place().from + (place().to - place().from) / 2 }); return; }
+    gsap.fromTo(track, { x: () => place().from }, { x: () => place().to, ease: 'none',
+      scrollTrigger: { trigger: strip, start: 'top bottom', end: 'bottom top', scrub: 0.8, invalidateOnRefresh: true } });
+    // polaroids swing a little as they arrive
+    gsap.from(strip.querySelectorAll('.polaroid'), { rotation: (i) => (i % 2 ? 9 : -9), transformOrigin: '50% -10px', duration: 1.6, ease: 'elastic.out(1, 0.45)', stagger: 0.08,
+      scrollTrigger: { trigger: strip, start: 'top 85%', once: true } });
+  });
+}
+
+/* ---------- Menu overlay: the Alice Brunch poster ---------- */
+export function initMenuOverlay() {
+  const overlay = document.getElementById('menuOverlay');
+  const close = document.getElementById('menuClose');
+  if (!overlay || !close) return;
+  const img = overlay.querySelector<HTMLElement>('.menu-overlay__img')!;
+  let opener: HTMLElement | null = null;
+  const open = (from?: HTMLElement) => {
+    opener = from ?? null;
+    overlay.hidden = false;
+    stopScroll();
+    gsap.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.35 });
+    gsap.fromTo(img, { y: 40, rotation: -2, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.1 });
+    close.focus();
+  };
+  const shut = () => {
+    gsap.to(overlay, { opacity: 0, duration: 0.25, onComplete: () => { overlay.hidden = true; startScroll(); opener?.focus(); } });
+  };
+  document.querySelectorAll<HTMLElement>('[data-menu]').forEach((el) => el.addEventListener('click', (e) => { e.preventDefault(); open(el); }));
+  close.addEventListener('click', shut);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay || (e.target as HTMLElement).classList.contains('menu-overlay__scroll')) shut(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.hidden) shut(); });
 }

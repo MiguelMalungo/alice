@@ -5,7 +5,7 @@ import { initMagnetic } from './ui/magnetic';
 import { drawTicks, initLiveWatch } from './ui/watch';
 import { initTunnel } from './webgl/tunnel';
 import { initHero } from './sections/hero';
-import { initHistoria, initFrames, initTypeset, initBrunch, initDoor, initMap, initSusan, initContacts, initBottom, initChrome } from './sections/landings';
+import { initHistoria, initFrames, initTypeset, initBrunch, initDoor, initMap, initSusan, initContacts, initBottom, initChrome, initStrips, initMenuOverlay } from './sections/landings';
 
 /* ---------- Preloader: the pocket watch ---------- */
 function preload(): Promise<void> {
@@ -66,13 +66,15 @@ async function boot() {
   initContacts();
   initBottom();
   initChrome();
+  initStrips();
+  initMenuOverlay();
   initMagnetic();
   initLiveWatch();
   initTunnel();
   initCursor();
 
   // anchor links go through Lenis
-  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
+  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]:not([data-menu])').forEach((a) => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href')!;
       if (id === '#') return;

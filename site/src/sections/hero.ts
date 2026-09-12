@@ -11,11 +11,6 @@ export function initHero() {
   const cue = document.getElementById('scrollcue')!;
   const veil = document.getElementById('veil')!;
 
-  // split the wordmark into characters
-  hero.querySelectorAll<HTMLElement>('.wordmark__alice, .wordmark__brew').forEach((el) => {
-    el.innerHTML = el.textContent!.split('').map((c) => `<span class="char">${c}</span>`).join('');
-  });
-
   // sparkles around the rabbit
   const pts = [[12, 30], [78, 22], [88, 58], [18, 66], [50, 8], [30, 48], [70, 78]];
   pts.forEach(([x, y], i) => {
@@ -45,8 +40,8 @@ export function initHero() {
 
   // page-load sequence (called after the preloader)
   const intro = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } })
-    .from('.wordmark__alice .char', { yPercent: 60, opacity: 0, rotation: () => gsap.utils.random(-8, 8), duration: 0.9, stagger: 0.06 })
-    .from('.wordmark__in, .wordmark__brew .char', { opacity: 0, y: 8, duration: 0.6, stagger: 0.02 }, '-=0.5')
+    // the wordmark writes itself in, left to right, like a signature
+    .fromTo('.wordmark__img', { clipPath: 'inset(-10% 100% -10% 0)', opacity: 0.6, y: 10 }, { clipPath: 'inset(-10% 0% -10% 0)', opacity: 1, y: 0, duration: 1.4, ease: 'power2.inOut' })
     .from(hole, { scaleX: 0.2, scaleY: 0.1, opacity: 0, duration: 0.8, ease: 'power4.out', clearProps: 'all' }, '-=0.6')
     .from(rabbit, { y: -90, opacity: 0, duration: 0.9, ease: 'back.out(1.4)', clearProps: 'all' }, '-=0.6')
     .from(sparkles.children, { opacity: 0, scale: 0, duration: 0.5, stagger: 0.05, ease: 'back.out(2)' }, '-=0.5')
