@@ -147,6 +147,33 @@ export function initTunnel() {
     drifts.push({ mesh, rot: new THREE.Vector3(rng(-0.4, 0.4), rng(-0.4, 0.4), rng(-0.3, 0.3)), bob: rng(0.1, 0.4), phase: rng(0, 6), z, r, a });
   }
 
+  // the real drinks: background-free photos on camera-facing cards, lit by the lamp
+  const cutouts = [
+    { file: 'cookie-coffee', w: 1150, h: 1197, size: 2.0 },
+    { file: 'latte-art', w: 914, h: 960, size: 1.7 },
+    { file: 'matcha-mango', w: 445, h: 819, size: 2.1 },
+    { file: 'queen-pancake', w: 943, h: 857, size: 2.2 },
+    { file: 'rose-latte', w: 1018, h: 770, size: 1.8 },
+  ];
+  const billboards: { mesh: THREE.Mesh; phase: number; sway: number }[] = [];
+  const loader = new THREE.TextureLoader();
+  cutouts.forEach((c, ci) => {
+    const tex = loader.load(`${import.meta.env.BASE_URL}img/cut/${c.file}.webp`);
+    tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+    const mat = new THREE.MeshStandardMaterial({ map: tex, transparent: true, alphaTest: 0.08, roughness: 0.85, metalness: 0, side: THREE.DoubleSide, depthWrite: false });
+    const geo = new THREE.PlaneGeometry(c.size * (c.w / c.h), c.size);
+    for (let k = 0; k < 3; k++) {
+      const mesh = new THREE.Mesh(geo, mat);
+      const seg = (LENGTH - 30) / (cutouts.length * 3);          // spread them evenly down the hole
+      const z = -(14 + (ci * 3 + k) * seg + rng(0, seg * 0.6));
+      const a = rng(0, Math.PI * 2), r = rng(1.2, RADIUS - 2.4);
+      mesh.position.set(Math.cos(a) * r, Math.sin(a) * r, z);
+      mesh.renderOrder = 2;
+      scene.add(mesh);
+      billboards.push({ mesh, phase: rng(0, 6), sway: rng(0.05, 0.12) });
+    }
+  });
+
   // gold motes
   const moteGeo = new THREE.BufferGeometry();
   const N = narrow ? 400 : 900; const arr = new Float32Array(N * 3);
@@ -163,10 +190,9 @@ export function initTunnel() {
   });
 
   // render only while a fall window or the hero dive is on screen
-  let active = 0;
+  const visible = new Set<Element>();
   const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => { active += e.isIntersecting ? 1 : -1; });
-    active = Math.max(0, active);
+    entries.forEach((e) => { if (e.isIntersecting) visible.add(e.target); else visible.delete(e.target); });
   }, { threshold: 0 });
   falls.forEach((f) => io.observe(f));
   io.observe(document.getElementById('hero')!);
@@ -175,7 +201,7 @@ export function initTunnel() {
   let t0 = performance.now();
   const clock = { t: 0 };
   gsap.ticker.add(() => {
-    if (!active) return;
+    if (!visible.size) return;
     const now = performance.now(); const dt = Math.min((now - t0) / 1000, 0.05); t0 = now; clock.t += dt;
     // camera glides after the scroll with a little lag and a slow roll
     camera.position.z += (cam.z - camera.position.z) * 0.08;
@@ -189,6 +215,11 @@ export function initTunnel() {
       m.rotation.x += d.rot.x * dt; m.rotation.y += d.rot.y * dt; m.rotation.z += d.rot.z * dt;
       m.position.x = Math.cos(d.a + clock.t * 0.05) * d.r;
       m.position.y = Math.sin(d.a + clock.t * 0.05) * d.r + Math.sin(clock.t * 0.8 + d.phase) * d.bob;
+    }
+    for (const b of billboards) {
+      b.mesh.quaternion.copy(camera.quaternion);                 // always face the camera
+      b.mesh.rotateZ(Math.sin(clock.t * 0.7 + b.phase) * b.sway); // hang and sway a little
+      b.mesh.position.y += Math.sin(clock.t * 0.9 + b.phase) * 0.0025;
     }
     motes.rotation.z = clock.t * 0.02;
     renderer.render(scene, camera);
