@@ -202,10 +202,25 @@ export function initChrome() {
   });
 }
 
-/* ---------- Photo strips: drift sideways as the section scrolls ---------- */
+/* ---------- Photo strips: drift with the scroll on desktop, swipe on touch ---------- */
 export function initStrips() {
   document.querySelectorAll<HTMLElement>('.strip').forEach((strip) => {
     const track = strip.querySelector<HTMLElement>('.strip__track')!;
+    const polaroids = strip.querySelectorAll('.polaroid');
+    if (!reducedMotion) {
+      // polaroids swing a little on their pegs as they arrive
+      gsap.from(polaroids, { rotation: (i) => (i % 2 ? 9 : -9), transformOrigin: '50% -10px', duration: 1.6, ease: 'elastic.out(1, 0.45)', stagger: 0.08,
+        scrollTrigger: { trigger: strip, start: 'top 85%', once: true } });
+    }
+    if (isTouch) {
+      // native swipe carousel; nudge it once so people see it moves, and bounce the arrow in the hint
+      const arrow = strip.querySelector('.strip__hint span');
+      if (arrow && !reducedMotion) gsap.to(arrow, { x: 6, duration: 0.7, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+      if (!reducedMotion) ScrollTrigger.create({ trigger: strip, start: 'top 75%', once: true, onEnter: () => {
+        gsap.to(strip, { scrollLeft: 70, duration: 0.6, ease: 'power2.out', delay: 0.5, yoyo: true, repeat: 1, repeatDelay: 0.2 });
+      } });
+      return;
+    }
     const dir = Number(strip.dataset.dir) || 1;
     const place = () => {
       const overflow = Math.max(track.scrollWidth - strip.clientWidth, 0);
@@ -214,9 +229,6 @@ export function initStrips() {
     if (reducedMotion) { gsap.set(track, { x: () => place().from + (place().to - place().from) / 2 }); return; }
     gsap.fromTo(track, { x: () => place().from }, { x: () => place().to, ease: 'none',
       scrollTrigger: { trigger: strip, start: 'top bottom', end: 'bottom top', scrub: 0.8, invalidateOnRefresh: true } });
-    // polaroids swing a little as they arrive
-    gsap.from(strip.querySelectorAll('.polaroid'), { rotation: (i) => (i % 2 ? 9 : -9), transformOrigin: '50% -10px', duration: 1.6, ease: 'elastic.out(1, 0.45)', stagger: 0.08,
-      scrollTrigger: { trigger: strip, start: 'top 85%', once: true } });
   });
 }
 
