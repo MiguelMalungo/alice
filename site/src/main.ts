@@ -5,7 +5,7 @@ import { initMagnetic } from './ui/magnetic';
 import { drawTicks, initLiveWatch } from './ui/watch';
 import { initTunnel } from './webgl/tunnel';
 import { initHero } from './sections/hero';
-import { initHistoria, initFrames, initTypeset, initBrunch, initDoor, initMap, initSusan, initContacts, initBottom, initChrome, initStrips, initMenuOverlay } from './sections/landings';
+import { initHistoria, initFrames, initTypeset, initBrunch, initDoor, initMap, initSusan, initContacts, initBottom, initChrome, initStrips, initMenuOverlay, initLantern, initShelf } from './sections/landings';
 
 /* ---------- Preloader: the pocket watch ---------- */
 function preload(): Promise<void> {
@@ -67,6 +67,8 @@ async function boot() {
   initBottom();
   initChrome();
   initStrips();
+  initLantern();
+  initShelf();
   initMenuOverlay();
   initMagnetic();
   initLiveWatch();

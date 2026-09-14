@@ -174,10 +174,19 @@ export function initContacts() {
 
 /* ---------- Footer: the bottom of the hole ---------- */
 export function initBottom() {
-  const rabbit = document.querySelector<HTMLElement>('.bottom__rabbit img');
+  const badge = document.querySelector<HTMLElement>('.bottom__badge img');
+  const wrap = document.getElementById('badge');
   const arrived = document.getElementById('arrived');
-  if (!rabbit || !arrived || reducedMotion) return;
-  gsap.to(rabbit, { scaleY: 0.97, duration: 0.12, yoyo: true, repeat: -1, repeatDelay: 3.4, ease: 'sine.inOut', transformOrigin: '50% 100%' });
+  if (!badge || !wrap || !arrived || reducedMotion) return;
+  // the stamp slowly turns in the lamplight, and leans toward the cursor
+  const idle = gsap.to(badge, { rotationY: 14, rotationX: -6, duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  if (!isTouch) {
+    const rx = gsap.quickTo(badge, 'rotationX', { duration: 0.5, ease: 'power3' });
+    const ry = gsap.quickTo(badge, 'rotationY', { duration: 0.5, ease: 'power3' });
+    wrap.addEventListener('pointerenter', () => idle.pause());
+    wrap.addEventListener('pointermove', (e) => { const r = wrap.getBoundingClientRect(); ry(((e.clientX - r.left) / r.width - 0.5) * 40); rx(-((e.clientY - r.top) / r.height - 0.5) * 30); });
+    wrap.addEventListener('pointerleave', () => { rx(0); ry(0); gsap.delayedCall(0.6, () => idle.resume()); });
+  }
   ScrollTrigger.create({ trigger: '#bottom', start: 'top 80%', onEnter: () => {
     if (velocity.peak > 45) gsap.fromTo(arrived, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.4 });
   } });
@@ -256,26 +265,171 @@ export function initStrips() {
   });
 }
 
-/* ---------- Menu overlay: the Alice Brunch poster ---------- */
+/* ---------- Menu overlay: the Alice Brunch poster and the Signature Coffee page ---------- */
 export function initMenuOverlay() {
   const overlay = document.getElementById('menuOverlay');
   const close = document.getElementById('menuClose');
   if (!overlay || !close) return;
-  const img = overlay.querySelector<HTMLElement>('.menu-overlay__img')!;
+  const tabs = overlay.querySelectorAll<HTMLButtonElement>('.menu-overlay__tab');
+  const pages = overlay.querySelectorAll<HTMLElement>('.menu-overlay__page');
+  const scroll = overlay.querySelector<HTMLElement>('.menu-overlay__scroll')!;
   let opener: HTMLElement | null = null;
+  const showPage = (name: string) => {
+    tabs.forEach((t) => { const on = t.dataset.page === name; t.classList.toggle('is-active', on); t.setAttribute('aria-selected', String(on)); });
+    pages.forEach((p) => p.classList.toggle('is-active', p.dataset.page === name));
+    scroll.scrollTop = 0;
+    const page = overlay.querySelector<HTMLElement>(`.menu-overlay__page[data-page="${name}"]`)!;
+    gsap.fromTo(page.children, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.06, overwrite: true });
+  };
   const open = (from?: HTMLElement) => {
     opener = from ?? null;
     overlay.hidden = false;
     stopScroll();
     gsap.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.35 });
-    gsap.fromTo(img, { y: 40, rotation: -2, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.1 });
+    showPage(from?.dataset.menuPage || 'brunch');
     close.focus();
   };
   const shut = () => {
     gsap.to(overlay, { opacity: 0, duration: 0.25, onComplete: () => { overlay.hidden = true; startScroll(); opener?.focus(); } });
   };
   document.querySelectorAll<HTMLElement>('[data-menu]').forEach((el) => el.addEventListener('click', (e) => { e.preventDefault(); open(el); }));
+  tabs.forEach((t) => t.addEventListener('click', () => showPage(t.dataset.page!)));
   close.addEventListener('click', shut);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay || (e.target as HTMLElement).classList.contains('menu-overlay__scroll')) shut(); });
+  overlay.addEventListener('click', (e) => { if (e.target === overlay || e.target === scroll) shut(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.hidden) shut(); });
+}
+
+/* ---------- The magic lantern: campaign frames crossfade inside the storybook frame ---------- */
+export function initLantern() {
+  const lantern = document.getElementById('lantern');
+  if (!lantern) return;
+  const frames = Array.from(lantern.querySelectorAll<HTMLImageElement>('.lantern__frame')).slice(0, isTouch ? 6 : 10);
+  lantern.querySelectorAll<HTMLImageElement>('.lantern__frame').forEach((f, i) => { if (i >= frames.length) f.remove(); });
+  const crank = document.getElementById('crank')!;
+  const arm = crank.querySelector<SVGGElement>('.crank__arm')!;
+  const count = document.getElementById('lanternCount')!;
+  let i = 0, playing = false, loaded = false;
+  let timer: gsap.core.Tween | null = null;
+
+  const load = () => { if (loaded) return; loaded = true; frames.forEach((f) => { if (f.dataset.src) { f.src = f.dataset.src; delete f.dataset.src; } }); };
+  const show = (n: number, dir = 1) => {
+    const prev = frames[i]; i = (n + frames.length) % frames.length; const next = frames[i];
+    count.textContent = `${i + 1} / ${frames.length}`;
+    if (reducedMotion) { prev.classList.remove('is-on'); next.classList.add('is-on'); return; }
+    gsap.killTweensOf([prev, next]);
+    next.classList.add('is-on');
+    gsap.fromTo(next, { opacity: 0, scale: 1.0 }, { opacity: 1, duration: 1.1, ease: 'power2.inOut' });
+    gsap.fromTo(next, { scale: 1.0 }, { scale: 1.08, duration: 5.2, ease: 'none' });
+    gsap.to(prev, { opacity: 0, duration: 1.1, ease: 'power2.inOut', onComplete: () => prev.classList.remove('is-on') });
+    gsap.to(arm, { rotation: `+=${dir * 180}`, duration: 0.9, ease: 'power2.inOut', svgOrigin: '30 30' });
+  };
+  const schedule = () => { timer?.kill(); if (playing) timer = gsap.delayedCall(4.2, () => { show(i + 1); schedule(); }); };
+  const play = () => { load(); if (playing) return; playing = true; if (!frames[i].classList.contains('is-on')) frames[i].classList.add('is-on'); gsap.fromTo(frames[i], { scale: 1 }, { scale: 1.08, duration: 5.2, ease: 'none' }); schedule(); };
+  const pause = () => { playing = false; timer?.kill(); };
+
+  crank.addEventListener('click', (e) => { e.stopPropagation(); show(i + 1); schedule(); });
+  lantern.addEventListener('click', () => { show(i + 1); schedule(); });
+  // dragging the crank in a circle turns the film
+  let dragging = false, lastAngle = 0, acc = 0;
+  const angleOf = (e: PointerEvent) => { const r = crank.getBoundingClientRect(); return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)); };
+  crank.addEventListener('pointerdown', (e) => { dragging = true; lastAngle = angleOf(e); acc = 0; crank.setPointerCapture(e.pointerId); e.stopPropagation(); });
+  crank.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const a = angleOf(e); let d = a - lastAngle; if (d > Math.PI) d -= 2 * Math.PI; if (d < -Math.PI) d += 2 * Math.PI; lastAngle = a; acc += d;
+    gsap.set(arm, { rotation: `+=${(d * 180) / Math.PI}`, svgOrigin: '30 30' });
+    if (acc > Math.PI / 2) { acc = 0; show(i + 1, 0); schedule(); } else if (acc < -Math.PI / 2) { acc = 0; show(i - 1, 0); schedule(); }
+  });
+  const stopDrag = () => { dragging = false; };
+  crank.addEventListener('pointerup', stopDrag); crank.addEventListener('pointercancel', stopDrag);
+
+  ScrollTrigger.create({ trigger: lantern, start: 'top 150%', once: true, onEnter: load });
+  ScrollTrigger.create({ trigger: lantern, start: 'top 90%', end: 'bottom 10%', onToggle: (st) => (st.isActive ? play() : pause()) });
+}
+
+/* ---------- Signature Coffee: the shelf of drinks ---------- */
+export function initShelf() {
+  const wrap = document.querySelector<HTMLElement>('.shelf-wrap');
+  const shelf = document.getElementById('shelf');
+  if (!wrap || !shelf) return;
+  const drinks = Array.from(shelf.querySelectorAll<HTMLElement>('.drink'));
+  const arts = drinks.map((d) => d.querySelector<HTMLElement>('.drink__art')!);
+  const prev = wrap.querySelector<HTMLButtonElement>('.strip__nav--l');
+  const next = wrap.querySelector<HTMLButtonElement>('.strip__nav--r');
+  const maxLeft = () => shelf.scrollWidth - shelf.clientWidth;
+
+  // the drink nearest the centre rises and tilts a little toward the cursor; the others settle back
+  let raf = 0;
+  const emphasise = () => {
+    raf = 0;
+    const cx = shelf.getBoundingClientRect().left + shelf.clientWidth / 2;
+    let best = 0, bestD = Infinity;
+    drinks.forEach((d, k) => {
+      const r = d.getBoundingClientRect(); const dist = Math.abs(r.left + r.width / 2 - cx);
+      const t = 1 - Math.min(dist / (r.width * 1.6), 1);
+      gsap.set(arts[k], { scale: 1 + 0.2 * t, y: -30 * t, rotation: 0 });
+      if (dist < bestD) { bestD = dist; best = k; }
+    });
+    drinks.forEach((d, k) => d.classList.toggle('is-center', k === best));
+    if (prev) prev.disabled = shelf.scrollLeft <= 2;
+    if (next) next.disabled = shelf.scrollLeft >= maxLeft() - 2;
+  };
+  const queue = () => { if (!raf) raf = requestAnimationFrame(emphasise); };
+  shelf.addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', queue);
+  // start on the second drink so there is something on both sides
+  requestAnimationFrame(() => { shelf.scrollLeft = drinks[1].offsetLeft - (shelf.clientWidth - drinks[1].offsetWidth) / 2; emphasise(); });
+
+  const step = () => drinks[0].offsetWidth + parseFloat(getComputedStyle(shelf.querySelector('.shelf__track')!).gap || '40');
+  const glide = (to: number) => gsap.to(shelf, { scrollLeft: gsap.utils.clamp(0, maxLeft(), to), duration: 0.7, ease: 'power3.out', overwrite: true });
+  prev?.addEventListener('click', () => glide(shelf.scrollLeft - step()));
+  next?.addEventListener('click', () => glide(shelf.scrollLeft + step()));
+
+  // mouse drag with inertia
+  let dragging = false, startX = 0, startLeft = 0, lastX = 0, lastT = 0, vx = 0;
+  shelf.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    dragging = true; startX = lastX = e.clientX; startLeft = shelf.scrollLeft; lastT = performance.now(); vx = 0;
+    shelf.classList.add('is-dragging'); shelf.setPointerCapture(e.pointerId); gsap.killTweensOf(shelf);
+  });
+  shelf.addEventListener('pointermove', (e) => {
+    if (!dragging) { if (!isTouch) tiltToward(e); return; }
+    const now = performance.now(); vx = (e.clientX - lastX) / Math.max(now - lastT, 1); lastX = e.clientX; lastT = now;
+    shelf.scrollLeft = startLeft - (e.clientX - startX);
+  });
+  const release = () => { if (!dragging) return; dragging = false; shelf.classList.remove('is-dragging'); glide(shelf.scrollLeft - vx * 260); };
+  shelf.addEventListener('pointerup', release); shelf.addEventListener('pointercancel', release);
+  shelf.addEventListener('wheel', (e) => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) e.stopPropagation(); }, { passive: true });
+
+  // the centre drink leans toward the cursor
+  const tiltToward = (e: PointerEvent) => {
+    const k = drinks.findIndex((d) => d.classList.contains('is-center')); if (k < 0) return;
+    const r = drinks[k].getBoundingClientRect();
+    const nx = gsap.utils.clamp(-1, 1, (e.clientX - (r.left + r.width / 2)) / r.width);
+    gsap.to(arts[k].querySelector('img'), { rotation: nx * 6, x: nx * 8, duration: 0.5, ease: 'power3', overwrite: 'auto' });
+  };
+  shelf.addEventListener('pointerleave', () => arts.forEach((a) => gsap.to(a.querySelector('img'), { rotation: 0, x: 0, duration: 0.6 })));
+
+  // steam on the hot cup
+  if (reducedMotion) return;
+  shelf.querySelectorAll<HTMLCanvasElement>('.drink__steam').forEach((cv) => {
+    const ctx = cv.getContext('2d')!; const W = cv.width, H = cv.height;
+    type Wisp = { x: number; y: number; r: number; a: number; s: number; w: number; p: number };
+    const wisps: Wisp[] = [];
+    let on = false, id = 0;
+    const spawn = () => wisps.push({ x: W / 2 + gsap.utils.random(-14, 14), y: H, r: gsap.utils.random(6, 12), a: 0, s: gsap.utils.random(0.25, 0.5), w: gsap.utils.random(0.6, 1.4), p: gsap.utils.random(0, 6) });
+    const tick = () => {
+      ctx.clearRect(0, 0, W, H);
+      if (Math.random() < 0.08 && wisps.length < 14) spawn();
+      for (let n = wisps.length - 1; n >= 0; n--) {
+        const q = wisps[n]; q.y -= q.s; q.r += 0.06; q.p += 0.02;
+        const life = 1 - q.y / H; q.a = Math.sin(life * Math.PI) * 0.35;
+        const g = ctx.createRadialGradient(q.x + Math.sin(q.p * q.w * 3) * 8, q.y, 0, q.x + Math.sin(q.p * q.w * 3) * 8, q.y, q.r);
+        g.addColorStop(0, `rgba(255,240,220,${q.a})`); g.addColorStop(1, 'rgba(255,240,220,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(q.x + Math.sin(q.p * q.w * 3) * 8, q.y, q.r, 0, Math.PI * 2); ctx.fill();
+        if (q.y < -q.r) wisps.splice(n, 1);
+      }
+      if (on) id = requestAnimationFrame(tick);
+    };
+    ScrollTrigger.create({ trigger: cv, start: 'top 100%', end: 'bottom 0%', onToggle: (st) => { on = st.isActive; if (on && !id) id = requestAnimationFrame(tick); if (!on) { cancelAnimationFrame(id); id = 0; } } });
+  });
 }

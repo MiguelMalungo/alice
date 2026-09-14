@@ -8,8 +8,12 @@
   <meta name="theme-color" content="#F8ECE2">
   <meta property="og:title" content="Alice in Brewland">
   <meta property="og:description" content="Welcome to the rabbit hole of brunch. Rua do Almada 334, Porto.">
-  <meta property="og:image" content="https://miguelmalungo.github.io/alice/img/pancake.jpg">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23B3302A' d='M12 21s-7.5-4.6-9.6-9.2C.9 8.5 3 5 6.6 5c2 0 3.6 1.1 4.4 2.6C11.8 6.1 13.4 5 15.4 5 19 5 21.1 8.5 19.6 11.8 17.5 16.4 12 21 12 21z'/%3E%3C/svg%3E">
+  <meta property="og:image" content="https://miguelmalungo.github.io/alice/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Lora:ital,wght@0,400;0,600;1,400&display=swap">
@@ -22,6 +26,7 @@
 
   <!-- Preloader: pocket watch -->
   <div class="loader" id="loader" aria-hidden="true">
+    <img class="loader__badge" src="/img/badge.webp" alt="" width="512" height="428">
     <div class="loader__watch">
       <svg viewBox="0 0 120 120" class="watch watch--loader">
         <circle cx="60" cy="60" r="52" class="watch__case"/>
@@ -87,10 +92,11 @@
     <a href="#historia" data-suit="♠" title="História"><span>História</span></a>
     <a href="#experiencia" data-suit="♦" title="Experiência"><span>Experiência</span></a>
     <a href="#brunch" data-suit="♣" title="Brunch"><span>Brunch</span></a>
-    <a href="#eventos" data-suit="♥" title="Eventos"><span>Eventos</span></a>
-    <a href="#localizacao" data-suit="♠" title="Localização"><span>Onde</span></a>
-    <a href="#dizem" data-suit="♦" title="Opiniões"><span>Opiniões</span></a>
-    <a href="#contactos" data-suit="♣" title="Contactos"><span>Contactos</span></a>
+    <a href="#cafes" data-suit="♥" title="Signature Coffee"><span>Cafés</span></a>
+    <a href="#eventos" data-suit="♠" title="Eventos"><span>Eventos</span></a>
+    <a href="#localizacao" data-suit="♦" title="Localização"><span>Onde</span></a>
+    <a href="#dizem" data-suit="♣" title="Opiniões"><span>Opiniões</span></a>
+    <a href="#contactos" data-suit="♥" title="Contactos"><span>Contactos</span></a>
   </nav>
 
   <main id="top">
@@ -132,6 +138,17 @@
         <p class="eyebrow">Capítulo I</p>
         <h2 class="reveal">A Nossa História</h2>
         <p class="lead reveal">Tudo começou com uma chávena de café e uma ideia um pouco… maluca<br>(mas as melhores ideias são sempre assim, não são?).</p>
+        <div class="story">
+          <figure class="frame frame--tilt-l story__frame" data-ripple>
+            <img src="/img/p-logo-parede.webp" alt="O coelho e o nome Alice in Brewland em néon na parede, com uma mesa de brunch por baixo" width="970" height="1600" loading="lazy">
+          </figure>
+          <figure class="story__quote">
+            <blockquote class="quote reveal">“It's no use going back to yesterday, because I was a different person then.”</blockquote>
+            <figcaption>Lewis Carroll, nas costas de quem faz o café</figcaption>
+            <img class="story__barista" src="/img/p-barista.webp" alt="Barista de costas junto à máquina, com a frase de Carroll na t-shirt" width="1571" height="1600" loading="lazy">
+          </figure>
+        </div>
+
         <p class="reveal">Inspirados pelo mundo de Alice no País das Maravilhas, criámos um espaço onde:</p>
 
         <div class="deck" id="deck">
@@ -148,11 +165,27 @@
     <section class="landing landing--split" id="experiencia">
       <div class="wrap split">
         <div class="split__media">
-          <figure class="frame frame--tilt-l" data-ripple>
-            <img src="/img/room.webp" alt="A sala principal: mesas de madeira, candeeiros de rattan e plantas junto às portadas" width="1050" height="1400" loading="lazy">
-          </figure>
+          <div class="lantern frame frame--tilt-l" id="lantern" data-cursor="Roda a manivela">
+            <div class="lantern__stage">
+              <img class="lantern__frame is-on" src="/img/lantern/l-01.webp" alt="Um casal ao brunch sob o néon Alice in Brewland" width="1400" height="933" fetchpriority="low">
+              <img class="lantern__frame" data-src="/img/lantern/l-02.webp" alt="O'Porto Iced Latte com pastel de nata, sob folhas" width="1400" height="1000" loading="lazy">
+              <img class="lantern__frame" data-src="/img/lantern/l-03.webp" alt="Ovos beneditinos, bowl, sumo e café" width="1400" height="1000" loading="lazy">
+              <img class="lantern__frame" data-src="/img/lantern/l-04.webp" alt="Panqueca Alice com sumo e latte" width="1400" height="1000" loading="lazy">
+              <img class="lantern__frame" data-src="/img/lantern/l-05.webp" alt="Hambúrguer e ovos turcos sob o logótipo" width="1400" height="1000" loading="lazy">
+              <img class="lantern__frame" data-src="/img/lantern/l-06.webp" alt="A máquina de café e a sala por trás" width="1400" height="1046" loading="lazy">
+              <img class="lantern__frame" data-src="/img/lantern/l-07.webp" alt="A esplanada, com um cão à mesa" width="1400" height="1000" loading="lazy">
+              <img class="lantern__frame" data-src="/img/lantern/l-08.webp" alt="Uma colaboradora com panquecas na sala cheia" width="1400" height="1000" loading="lazy">
+              <img class="lantern__frame" data-src="/img/lantern/l-09.webp" alt="Bowl de iogurte, livro e matcha vistos de cima" width="1400" height="1000" loading="lazy">
+              <img class="lantern__frame" data-src="/img/lantern/l-10.webp" alt="Um hambúrguer na mão" width="1400" height="1000" loading="lazy">
+              <div class="lantern__vignette"></div>
+            </div>
+            <button class="lantern__crank" id="crank" aria-label="Passar à imagem seguinte">
+              <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="9" class="crank__hub"/><g class="crank__arm"><rect x="27" y="4" width="6" height="30" rx="3"/><circle cx="30" cy="6" r="6"/></g></svg>
+            </button>
+            <span class="lantern__count" id="lanternCount">1 / 10</span>
+          </div>
           <figure class="frame frame--peek" data-ripple>
-            <img src="/img/bowl.webp" alt="Bowl de fruta ao lado de um livro aberto e um matcha latte" width="1050" height="1400" loading="lazy">
+            <img src="/img/p-sala.webp" alt="A sala com chão em xadrez e cadeiras de rattan" width="1080" height="1423" loading="lazy">
           </figure>
         </div>
         <div class="split__text">
@@ -174,10 +207,11 @@
         <div class="strip__track">
           <figure class="polaroid"><img src="/img/g-lamps.webp" alt="Candeeiros de rattan sobre a sala ao fim da tarde" width="1050" height="1400" loading="lazy"><figcaption>A sala, ao fim da tarde</figcaption></figure>
           <figure class="polaroid"><img src="/img/g-guests-rabbit-3.webp" alt="Três clientes à mesa com o Coelho Branco" width="1240" height="826" loading="lazy"><figcaption>Convidados ilustres</figcaption></figure>
-          <figure class="polaroid"><img src="/img/g-table-spread.webp" alt="Mesa cheia: ovos beneditinos, panquecas, fruta e bagel" width="827" height="1400" loading="lazy"><figcaption>Mesa posta</figcaption></figure>
+          <figure class="polaroid"><img src="/img/p-pancakes-napkin.webp" alt="Pudim de chia com fruta sobre um guardanapo com o logótipo" width="1199" height="1600" loading="lazy"><figcaption>Sobre o guardanapo da casa</figcaption></figure>
           <figure class="polaroid"><img src="/img/g-guests-rabbit-2.webp" alt="Duas amigas e o Coelho Branco com o seu relógio" width="1024" height="1024" loading="lazy"><figcaption>O Coelho Branco veio ao brunch</figcaption></figure>
-          <figure class="polaroid"><img src="/img/g-eggs-benedict.webp" alt="Ovos beneditinos com salmão e o logótipo Alice in Brewland" width="1237" height="1400" loading="lazy"><figcaption>Ovos Beneditinos</figcaption></figure>
-          <figure class="polaroid"><img src="/img/g-brunch-spread.webp" alt="Brunch para dois com pão de massa-mãe e matcha gelado" width="797" height="1400" loading="lazy"><figcaption>Brunch para dois</figcaption></figure>
+          <figure class="polaroid"><img src="/img/p-brunch-2.webp" alt="Um bowl de fruta segurado sobre o chão em xadrez" width="1199" height="1600" loading="lazy"><figcaption>Sobre o xadrez</figcaption></figure>
+          <figure class="polaroid"><img src="/img/p-entrada.webp" alt="A fachada verde com o logótipo no vidro" width="1200" height="1600" loading="lazy"><figcaption>A porta, na Rua do Almada</figcaption></figure>
+          <figure class="polaroid"><img src="/img/p-macha.webp" alt="Um matcha gelado na mão, com palhinha às riscas" width="1199" height="1600" loading="lazy"><figcaption>Matcha para levar</figcaption></figure>
         </div></div>
         <p class="strip__hint" aria-hidden="true">Arrasta ou desliza <span>→</span></p>
       </div>
@@ -194,21 +228,37 @@
           <p class="reveal">Na nossa mesa cabem todos os personagens:</p>
 
           <div class="menu" id="menu">
-            <button class="mcard" data-suit="♥" data-cursor="Bebe-me" aria-label="Panquecas: virar a carta">
-              <span class="mcard__face mcard__front"><span class="mcard__corner">♥</span><span class="mcard__name">Panquecas</span><span class="mcard__corner mcard__corner--b">♥</span></span>
-              <span class="mcard__face mcard__back"><span>que fariam a Rainha de Copas sorrir (e isso já é dizer muito!)</span></span>
+            <button class="mcard" data-suit="♥" data-cursor="Come-me" aria-label="Ovos Beneditinos: virar a carta">
+              <span class="mcard__face mcard__front"><span class="mcard__corner">♥</span><span class="mcard__name">Ovos Beneditinos</span><span class="mcard__corner mcard__corner--b">♥</span></span>
+              <span class="mcard__face mcard__back"><img src="/img/menu/ovos-beneditinos.webp" alt="" width="900" height="675" loading="lazy"><span class="mcard__desc">com peru fumado e espinafres, sobre pão de massa-mãe e molho holandês</span></span>
             </button>
-            <button class="mcard" data-suit="♠" data-cursor="Come-me" aria-label="Bagels: virar a carta">
-              <span class="mcard__face mcard__front"><span class="mcard__corner">♠</span><span class="mcard__name">Bagels</span><span class="mcard__corner mcard__corner--b">♠</span></span>
-              <span class="mcard__face mcard__back"><span>artesanais dignos de um banquete de Chapeleiro Louco</span></span>
+            <button class="mcard" data-suit="♠" data-cursor="Come-me" aria-label="Salmon Benedict: virar a carta">
+              <span class="mcard__face mcard__front"><span class="mcard__corner">♠</span><span class="mcard__name">Salmon Benedict</span><span class="mcard__corner mcard__corner--b">♠</span></span>
+              <span class="mcard__face mcard__back"><img src="/img/menu/salmon-benedict.webp" alt="" width="900" height="675" loading="lazy"><span class="mcard__desc">ovos escalfados, salmão fumado e holandês, sobre pão tostado</span></span>
             </button>
-            <button class="mcard" data-suit="♦" data-cursor="Come-me" aria-label="Bowls: virar a carta">
-              <span class="mcard__face mcard__front"><span class="mcard__corner">♦</span><span class="mcard__name">Bowls</span><span class="mcard__corner mcard__corner--b">♦</span></span>
-              <span class="mcard__face mcard__back"><span>tão frescas que até o Gato de Cheshire ficaria sem palavras (ou sem sorriso)</span></span>
+            <button class="mcard" data-suit="♦" data-cursor="Come-me" aria-label="Panquecas Rainha de Copas: virar a carta">
+              <span class="mcard__face mcard__front"><span class="mcard__corner">♦</span><span class="mcard__name">Panquecas Rainha de Copas</span><span class="mcard__corner mcard__corner--b">♦</span></span>
+              <span class="mcard__face mcard__back"><img src="/img/menu/panquecas.webp" alt="" width="900" height="675" loading="lazy"><span class="mcard__desc">com brownie, gelado de baunilha, framboesas e caramelo salgado</span></span>
             </button>
-            <button class="mcard" data-suit="♣" data-cursor="Bebe-me" aria-label="Café: virar a carta">
-              <span class="mcard__face mcard__front"><span class="mcard__corner">♣</span><span class="mcard__name">Café</span><span class="mcard__corner mcard__corner--b">♣</span></span>
-              <span class="mcard__face mcard__back"><span>100% arábica que desperta até o mais sonolento Coelho Branco</span></span>
+            <button class="mcard" data-suit="♣" data-cursor="Come-me" aria-label="Hambúrguer: virar a carta">
+              <span class="mcard__face mcard__front"><span class="mcard__corner">♣</span><span class="mcard__name">Hambúrguer</span><span class="mcard__corner mcard__corner--b">♣</span></span>
+              <span class="mcard__face mcard__back"><img src="/img/menu/hamburguer.webp" alt="" width="900" height="675" loading="lazy"><span class="mcard__desc">no pão brioche, com queijo derretido e batata frita caseira</span></span>
+            </button>
+            <button class="mcard" data-suit="♥" data-cursor="Come-me" aria-label="Ovos Turcos: virar a carta">
+              <span class="mcard__face mcard__front"><span class="mcard__corner">♥</span><span class="mcard__name">Ovos Turcos</span><span class="mcard__corner mcard__corner--b">♥</span></span>
+              <span class="mcard__face mcard__back"><img src="/img/menu/turcos.webp" alt="" width="900" height="675" loading="lazy"><span class="mcard__desc">iogurte, manteiga de pimentão e pão quente para molhar</span></span>
+            </button>
+            <button class="mcard" data-suit="♠" data-cursor="Come-me" aria-label="Salada de Camarão: virar a carta">
+              <span class="mcard__face mcard__front"><span class="mcard__corner">♠</span><span class="mcard__name">Salada de Camarão</span><span class="mcard__corner mcard__corner--b">♠</span></span>
+              <span class="mcard__face mcard__back"><img src="/img/menu/salada-camarao.webp" alt="" width="900" height="675" loading="lazy"><span class="mcard__desc">camarão, manga, espinafres e molho da casa</span></span>
+            </button>
+            <button class="mcard" data-suit="♦" data-cursor="Bebe-me" aria-label="Bowl de Iogurte: virar a carta">
+              <span class="mcard__face mcard__front"><span class="mcard__corner">♦</span><span class="mcard__name">Bowl de Iogurte</span><span class="mcard__corner mcard__corner--b">♦</span></span>
+              <span class="mcard__face mcard__back"><img src="/img/menu/bowl-iogurte.webp" alt="" width="900" height="675" loading="lazy"><span class="mcard__desc">com fruta fresca, granola caseira e mel</span></span>
+            </button>
+            <button class="mcard" data-suit="♣" data-cursor="Come-me" aria-label="Bagels: virar a carta">
+              <span class="mcard__face mcard__front"><span class="mcard__corner">♣</span><span class="mcard__name">Bagels</span><span class="mcard__corner mcard__corner--b">♣</span></span>
+              <span class="mcard__face mcard__back"><img src="/img/menu/bagels.webp" alt="" width="900" height="675" loading="lazy"><span class="mcard__desc">artesanais, dignos de um banquete de Chapeleiro Louco</span></span>
             </button>
           </div>
 
@@ -217,7 +267,7 @@
         </div>
         <div class="split__media">
           <figure class="frame frame--tilt-r frame--big" data-ripple>
-            <img src="/img/pancake.webp" alt="Panquecas com framboesas e uma bolacha em forma de coração da Rainha de Copas" width="1050" height="1400" loading="lazy">
+            <img src="/img/p-pancakes-2.webp" alt="Pudim de chia com fruta e flores, visto de cima sobre o chão em xadrez" width="1199" height="1600" loading="lazy">
             <span class="tag" id="drinkme"><i></i>Drink me</span>
           </figure>
         </div>
@@ -227,13 +277,64 @@
         <button class="strip__nav strip__nav--r" aria-label="Mais fotografias" data-cursor="Seguinte"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="strip" data-dir="1" aria-label="Fotografias de bebidas e pratos">
         <div class="strip__track">
-          <figure class="polaroid"><img src="/img/g-drink-matcha-bowl.webp" alt="Matcha com manga e um bowl de granola e fruta" width="1050" height="1400" loading="lazy"><figcaption>Matcha, manga e o bowl da manhã</figcaption></figure>
-          <figure class="polaroid"><img src="/img/g-three-lattes.webp" alt="Três cafés com latte art e pétalas de rosa" width="1050" height="1400" loading="lazy"><figcaption>Três cafés, três histórias</figcaption></figure>
+          <figure class="polaroid"><img src="/img/p-cappuccino-3.webp" alt="Três cafés com latte art e pétalas de rosa" width="1200" height="1600" loading="lazy"><figcaption>Três cafés, três histórias</figcaption></figure>
+          <figure class="polaroid"><img src="/img/p-bowl-yogurt.webp" alt="Bowl de iogurte com fruta ao lado de um livro e um matcha" width="1199" height="1600" loading="lazy"><figcaption>Bowl, livro e matcha</figcaption></figure>
+          <figure class="polaroid"><img src="/img/p-oporto-frame.webp" alt="O'Porto Iced Latte com pastel de nata, sob folhas" width="1400" height="1000" loading="lazy"><figcaption>O'Porto Iced Latte</figcaption></figure>
           <figure class="polaroid"><img src="/img/g-matcha-cookie.webp" alt="Bolacha de matcha e flor de sal em forma de garrafa Drink Me sobre um café" width="918" height="1400" loading="lazy"><figcaption>Bolacha matcha e flor de sal</figcaption></figure>
           <figure class="polaroid"><img src="/img/g-latte-art.webp" alt="Duas chávenas de café com latte art" width="820" height="1400" loading="lazy"><figcaption>Latte art</figcaption></figure>
           <figure class="polaroid"><img src="/img/pancake.webp" alt="Panquecas Rainha de Copas" width="1050" height="1400" loading="lazy"><figcaption>Panquecas Rainha de Copas</figcaption></figure>
+          <figure class="polaroid"><img src="/img/p-brunch.webp" alt="Bowl de fruta, livro aberto e matcha latte" width="1199" height="1600" loading="lazy"><figcaption>Brunch com livro</figcaption></figure>
         </div></div>
         <p class="strip__hint" aria-hidden="true">Arrasta ou desliza <span>→</span></p>
+      </div>
+    </section>
+
+
+    <!-- ========== SIGNATURE COFFEE ========== -->
+    <section class="landing landing--dark" id="cafes">
+      <img class="cafes__backdrop" src="/img/p-maquina.webp" alt="" width="1451" height="1084" loading="lazy">
+      <div class="wrap cafes__head">
+        <div class="chapter"><svg class="chapter__rule" viewBox="0 0 600 30" preserveAspectRatio="none"><path d="M0 15 C 60 5, 120 25, 180 15 S 300 5, 360 15 S 480 25, 600 15" /></svg><img class="chapter__heart" src="/img/heart.webp" alt="" width="150" height="152"></div>
+        <p class="eyebrow">Capítulo IV</p>
+        <h2 class="reveal">Signature Coffee</h2>
+        <blockquote class="quote quote--center reveal">“Take some more tea,” the March Hare said. Por aqui, toma antes um café assinado.</blockquote>
+        <p class="reveal">Seis cafés que só existem nesta toca. Arrasta a prateleira.</p>
+      </div>
+      <div class="shelf-wrap">
+        <button class="strip__nav strip__nav--l" aria-label="Café anterior" data-cursor="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="strip__nav strip__nav--r" aria-label="Café seguinte" data-cursor="Seguinte"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="shelf" id="shelf">
+          <div class="shelf__track">
+          <figure class="drink" data-cursor="O'Porto Latte">
+            <div class="drink__art"><img src="/img/cut/oporto-latte.webp" alt="O'Porto Latte" width="610" height="1024" loading="lazy"></div>
+            <figcaption><b>O'Porto Latte</b><span>latte gelado com pastel de nata a coroar</span></figcaption>
+          </figure>
+          <figure class="drink drink--hot" data-cursor="Cappuccino Alice">
+            <div class="drink__art"><img src="/img/cut/cappuccino-alice.webp" alt="Cappuccino Alice" width="1024" height="949" loading="lazy"><canvas class="drink__steam" width="120" height="160" aria-hidden="true"></canvas></div>
+            <figcaption><b>Cappuccino Alice</b><span>pétalas de rosa, praliné na borda e um coelho na espuma</span></figcaption>
+          </figure>
+          <figure class="drink" data-cursor="Alice Latte">
+            <div class="drink__art"><img src="/img/cut/alice-latte.webp" alt="Alice Latte" width="895" height="1024" loading="lazy"></div>
+            <figcaption><b>Alice Latte</b><span>latte gelado com um mini donut a fazer de tampa</span></figcaption>
+          </figure>
+          <figure class="drink" data-cursor="Iced Alice Latte Caramelo">
+            <div class="drink__art"><img src="/img/cut/iced-alice-caramelo.webp" alt="Iced Alice Latte Caramelo" width="896" height="1024" loading="lazy"></div>
+            <figcaption><b>Iced Alice Latte Caramelo</b><span>caramelo salgado, gelo e flor de sal</span></figcaption>
+          </figure>
+          <figure class="drink" data-cursor="Iced Matcha Vanilla Strawberry">
+            <div class="drink__art"><img src="/img/cut/iced-matcha-strawberry.webp" alt="Iced Matcha Vanilla Strawberry" width="751" height="1024" loading="lazy"></div>
+            <figcaption><b>Iced Matcha Vanilla Strawberry</b><span>matcha, baunilha e morango em camadas</span></figcaption>
+          </figure>
+          <figure class="drink" data-cursor="Iced Matcha Mango Vanilla">
+            <div class="drink__art"><img src="/img/cut/iced-matcha-mango.webp" alt="Iced Matcha Mango Vanilla" width="658" height="1024" loading="lazy"></div>
+            <figcaption><b>Iced Matcha Mango Vanilla</b><span>matcha, manga e baunilha, com uma flor</span></figcaption>
+          </figure>
+          </div>
+          <div class="shelf__board" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="wrap cafes__foot">
+        <a class="textlink textlink--light" href="#menu" data-menu data-menu-page="coffee" data-cursor="Menu">Ver todos os cafés →</a>
       </div>
     </section>
 
@@ -244,13 +345,16 @@
       <div class="wrap split">
         <div class="split__media">
           <div class="door" id="door" data-cursor="Entrar">
-            <div class="door__room"><img src="/img/private.webp" alt="A sala privada: mesa vermelha sob uma abóbada de pedra, com discos tecidos na parede" width="1050" height="1400" loading="lazy"></div>
+            <div class="door__room"><img src="/img/p-cave.webp" alt="A sala privada: mesa vermelha sob uma abóbada de pedra, com discos tecidos na parede" width="1200" height="1600" loading="lazy"></div>
             <div class="door__leaf"><span class="door__knob"></span><span class="door__plate">Sala Privada</span></div>
           </div>
+          <figure class="frame frame--peek frame--peek-host" data-ripple>
+            <img src="/img/lantern/l-08.webp" alt="Uma colaboradora traz panquecas à sala cheia" width="1400" height="1000" loading="lazy">
+          </figure>
         </div>
         <div class="split__text">
           <div class="chapter chapter--left"><svg class="chapter__rule" viewBox="0 0 600 30" preserveAspectRatio="none"><path d="M0 15 C 60 5, 120 25, 180 15 S 300 5, 360 15 S 480 25, 600 15" /></svg><img class="chapter__heart" src="/img/heart.webp" alt="" width="150" height="152"></div>
-          <p class="eyebrow">Capítulo IV</p>
+          <p class="eyebrow">Capítulo V</p>
           <h2 class="reveal">Eventos &amp; Sala Privada</h2>
           <p class="lead reveal">Porque nem todas as histórias se passam à mesa do costume.</p>
           <p class="reveal">Na Alice in Brewland há espaço para encontros especiais, celebrações improváveis e ideias que pedem outro cenário.</p>
@@ -271,7 +375,7 @@
       <div class="wrap split split--rev">
         <div class="split__text">
           <div class="chapter chapter--left"><svg class="chapter__rule" viewBox="0 0 600 30" preserveAspectRatio="none"><path d="M0 15 C 60 5, 120 25, 180 15 S 300 5, 360 15 S 480 25, 600 15" /></svg><img class="chapter__heart" src="/img/heart.webp" alt="" width="150" height="152"></div>
-          <p class="eyebrow">Capítulo V</p>
+          <p class="eyebrow">Capítulo VI</p>
           <h2 class="reveal">Localização &amp; Horário</h2>
           <blockquote class="quote reveal">“Não precisas de seguir um coelho branco para nos encontrar.”</blockquote>
           <p class="reveal">Estamos na <strong>Rua do Almada 334</strong>, no coração do Porto –<br>fácil de chegar, difícil de sair (porque vais querer ficar).</p>
@@ -317,6 +421,10 @@
             <span class="map__pin" aria-hidden="true">♥</span>
             <span class="map__runner" id="runner" aria-hidden="true"><img src="/img/rabbit-sm.webp" alt="" width="600" height="810"></span>
           </div>
+          <figure class="frame frame--door" data-ripple>
+            <img src="/img/p-entrada.webp" alt="A fachada verde da Alice in Brewland, com o logótipo no vidro" width="1200" height="1600" loading="lazy">
+            <figcaption>É esta a porta</figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -325,14 +433,14 @@
     <section class="landing landing--center" id="dizem">
       <div class="wrap">
         <div class="chapter"><svg class="chapter__rule" viewBox="0 0 600 30" preserveAspectRatio="none"><path d="M0 15 C 60 5, 120 25, 180 15 S 300 5, 360 15 S 480 25, 600 15" /></svg><img class="chapter__heart" src="/img/heart.webp" alt="" width="150" height="152"></div>
-        <p class="eyebrow">Capítulo VI</p>
+        <p class="eyebrow">Capítulo VII</p>
         <h2 class="reveal">O Que Dizem Sobre Nós</h2>
         <p class="reveal hint">Roda a mesa <span aria-hidden="true">↻</span></p>
       </div>
       <div class="susan" id="susan">
         <div class="susan__wheel" id="wheel">
           <article class="review" style="--i:0"><div class="stars"><i></i><i></i><i></i><i></i><i></i></div><p>“Espaço muitíssimo agradável, ambiente fabuloso. A comida é mesmo muito boa, agradável e surpreendente.”</p></article>
-          <article class="review" style="--i:1"><div class="stars"><i></i><i></i><i></i><i></i><i></i></div><p>“A simpatia impera durante todo o dia e o outro ponto alto, são pet friendly… muito recomendável e de acesso fácil!”</p></article>
+          <article class="review review--photo" style="--i:1"><img class="review__photo" src="/img/lantern/l-07.webp" alt="" width="1400" height="1000" loading="lazy"><div class="stars"><i></i><i></i><i></i><i></i><i></i></div><p>“A simpatia impera durante todo o dia e o outro ponto alto, são pet friendly… muito recomendável e de acesso fácil!”</p></article>
           <article class="review" style="--i:2"><div class="stars"><i></i><i></i><i></i><i></i><i></i></div><p>“Se você procura um lugar aconchegante e charmoso para tomar um café em um lugar lindo, o Alice in Brewland é uma verdadeira jóia!”</p></article>
         </div>
       </div>
@@ -342,7 +450,7 @@
     <section class="landing landing--center landing--alt" id="contactos">
       <div class="wrap">
         <div class="chapter"><svg class="chapter__rule" viewBox="0 0 600 30" preserveAspectRatio="none"><path d="M0 15 C 60 5, 120 25, 180 15 S 300 5, 360 15 S 480 25, 600 15" /></svg><img class="chapter__heart" src="/img/heart.webp" alt="" width="150" height="152"></div>
-        <p class="eyebrow">Capítulo VII</p>
+        <p class="eyebrow">Capítulo VIII</p>
         <h2 class="reveal">Contactos &amp; Redes Sociais</h2>
         <p class="reveal">Segue o rasto da magia:</p>
 
@@ -415,7 +523,7 @@
 
     <!-- ========== FOOTER: the bottom of the hole ========== -->
     <footer class="bottom" id="bottom">
-      <div class="bottom__rabbit"><img src="/img/rabbit-sm.webp" alt="" width="600" height="810" loading="lazy"></div>
+      <div class="bottom__badge" id="badge"><img src="/img/badge.webp" alt="Alice in Brewland · Coffee Lovers" width="512" height="428" loading="lazy"></div>
       <p class="bottom__quote">“Entra no nosso mundo: onde cada café é uma poção mágica e cada brunch uma aventura sem fim.”</p>
       <p class="bottom__arrived" id="arrived">Chegaste ao fundo.</p>
       <div class="bottom__meta"><span>Alice in Brewland · Rua do Almada 334, Porto</span><span>NIF 517 871 335</span></div>
@@ -425,9 +533,26 @@
   <!-- Menu overlay -->
   <div class="menu-overlay" id="menuOverlay" hidden role="dialog" aria-modal="true" aria-label="Menu Alice Brunch">
     <button class="menu-overlay__close" id="menuClose" aria-label="Fechar o menu" data-cursor="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    <div class="menu-overlay__tabs" role="tablist">
+      <button class="menu-overlay__tab is-active" role="tab" data-page="brunch" aria-selected="true">Alice Brunch</button>
+      <button class="menu-overlay__tab" role="tab" data-page="coffee" aria-selected="false">Signature Coffee</button>
+    </div>
     <div class="menu-overlay__scroll">
-      <img class="menu-overlay__img" src="/img/menu.webp" alt="Menu Alice Brunch: Ovos Beneditinos, Panquecas Rainha de Copas, Iogurte Rabbit e uma bebida incluída com bolacha artesanal, 25,50€" width="1024" height="1536" loading="lazy">
-      <p class="menu-overlay__hint">Alice Brunch · 25,50€ · bebida incluída</p>
+      <div class="menu-overlay__page is-active" data-page="brunch">
+        <img class="menu-overlay__img" src="/img/menu.webp" alt="Menu Alice Brunch: Ovos Beneditinos, Panquecas Rainha de Copas, Iogurte Rabbit e uma bebida incluída com bolacha artesanal, 25,50€" width="1024" height="1536" loading="lazy">
+        <p class="menu-overlay__hint">Alice Brunch · 25,50€ · bebida incluída</p>
+      </div>
+      <div class="menu-overlay__page" data-page="coffee">
+        <ul class="coffee-list">
+          <li><img src="/img/cut/oporto-latte.webp" alt="" width="610" height="1024" loading="lazy"><div><b>O'Porto Latte</b><span>latte gelado com pastel de nata a coroar</span></div></li>
+          <li><img src="/img/cut/cappuccino-alice.webp" alt="" width="1024" height="949" loading="lazy"><div><b>Cappuccino Alice</b><span>pétalas de rosa, praliné na borda e um coelho na espuma</span></div></li>
+          <li><img src="/img/cut/alice-latte.webp" alt="" width="895" height="1024" loading="lazy"><div><b>Alice Latte</b><span>latte gelado com um mini donut a fazer de tampa</span></div></li>
+          <li><img src="/img/cut/iced-alice-caramelo.webp" alt="" width="896" height="1024" loading="lazy"><div><b>Iced Alice Latte Caramelo</b><span>caramelo salgado, gelo e flor de sal</span></div></li>
+          <li><img src="/img/cut/iced-matcha-strawberry.webp" alt="" width="751" height="1024" loading="lazy"><div><b>Iced Matcha Vanilla Strawberry</b><span>matcha, baunilha e morango em camadas</span></div></li>
+          <li><img src="/img/cut/iced-matcha-mango.webp" alt="" width="658" height="1024" loading="lazy"><div><b>Iced Matcha Mango Vanilla</b><span>matcha, manga e baunilha, com uma flor</span></div></li>
+        </ul>
+        <p class="menu-overlay__hint">Signature Coffee · preços em breve</p>
+      </div>
     </div>
   </div>
 

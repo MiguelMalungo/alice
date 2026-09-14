@@ -147,34 +147,43 @@ export function initTunnel() {
     drifts.push({ mesh, rot: new THREE.Vector3(rng(-0.4, 0.4), rng(-0.4, 0.4), rng(-0.3, 0.3)), bob: rng(0.1, 0.4), phase: rng(0, 6), z, r, a });
   }
 
-  // the real drinks: background-free photos on camera-facing cards, lit by the lamp.
-  // Every fall window gets the full set once, laid out along the stretch of tunnel that window scrolls through.
+  // the signature coffees: studio cut-outs on camera-facing cards, lit by the lamp, each on its wooden board.
+  // Every fall window gets the full set once, laid out along the stretch of tunnel that window scrolls through,
+  // plus the "Coffee Lovers" badge turning past as a coin.
   const cutouts = [
-    { file: 'cookie-coffee', w: 1150, h: 1197, size: 2.0 },
-    { file: 'latte-art', w: 914, h: 960, size: 1.7 },
-    { file: 'matcha-mango', w: 445, h: 819, size: 2.1 },
-    { file: 'queen-pancake', w: 943, h: 857, size: 2.2 },
-    { file: 'rose-latte', w: 1018, h: 770, size: 1.8 },
+    { file: 'oporto-latte', w: 610, h: 1024, size: 2.5 },
+    { file: 'cappuccino-alice', w: 1024, h: 949, size: 2.2 },
+    { file: 'alice-latte', w: 895, h: 1024, size: 2.4 },
+    { file: 'iced-alice-caramelo', w: 896, h: 1024, size: 2.4 },
+    { file: 'iced-matcha-strawberry', w: 751, h: 1024, size: 2.4 },
+    { file: 'iced-matcha-mango', w: 658, h: 1024, size: 2.4 },
   ];
-  const billboards: { mesh: THREE.Mesh; phase: number; sway: number; fall: number; slot: number; a: number; r: number }[] = [];
+  type Board = { mesh: THREE.Mesh; phase: number; sway: number; tilt: number; fall: number; slot: number; a: number; r: number; coin: boolean };
+  const billboards: Board[] = [];
   const loader = new THREE.TextureLoader();
-  const cutMats = cutouts.map((c) => {
-    const tex = loader.load(`${import.meta.env.BASE_URL}img/cut/${c.file}.webp`);
+  const cutMat = (file: string) => {
+    const tex = loader.load(`${import.meta.env.BASE_URL}img/${file}.webp`);
     tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
-    return new THREE.MeshStandardMaterial({ map: tex, transparent: true, alphaTest: 0.08, roughness: 0.85, metalness: 0, side: THREE.DoubleSide, depthWrite: false });
-  });
+    return new THREE.MeshStandardMaterial({ map: tex, transparent: true, alphaTest: 0.08, roughness: 0.8, metalness: 0, side: THREE.DoubleSide, depthWrite: false });
+  };
+  const cutMats = cutouts.map((c) => cutMat('cut/' + c.file));
+  const coinMat = cutMat('badge');
   falls.forEach((_, fi) => {
     // a different order and side for each fall so the second descent doesn't replay the first
-    const orders = [[0, 2, 3, 1, 4], [3, 4, 0, 2, 1]];
+    const orders = [[0, 3, 1, 4, 2, 5], [4, 1, 5, 0, 3, 2]];
     const order = orders[fi % orders.length];
     order.forEach((ci, slot) => {
       const c = cutouts[ci];
       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(c.size * (c.w / c.h), c.size), cutMats[ci]);
       mesh.renderOrder = 2;
       scene.add(mesh);
-      billboards.push({ mesh, phase: rng(0, 6), sway: rng(0.05, 0.12), fall: fi, slot,
-        a: (slot / cutouts.length) * Math.PI * 2 + fi * 0.9 + rng(-0.3, 0.3), r: rng(1.5, 2.6) });
+      billboards.push({ mesh, phase: rng(0, 6), sway: rng(0.04, 0.1), tilt: rng(0.18, 0.3) * (slot % 2 ? 1 : -1), fall: fi, slot,
+        a: (slot / (cutouts.length + 1)) * Math.PI * 2 + fi * 1.1 + rng(-0.25, 0.25), r: rng(1.6, 2.7), coin: false });
     });
+    const coin = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.7 * (428 / 512)), coinMat);
+    coin.renderOrder = 2; scene.add(coin);
+    billboards.push({ mesh: coin, phase: rng(0, 6), sway: 0, tilt: 0, fall: fi, slot: cutouts.length,
+      a: (cutouts.length / (cutouts.length + 1)) * Math.PI * 2 + fi * 1.1, r: rng(1.4, 2.2), coin: true });
   });
   // where along the hole each fall window looks: camera z at a given scroll position
   const zAtScroll = (y: number) => -(y / Math.max(ScrollTrigger.maxScroll(window), 1)) * (LENGTH - 20);
@@ -236,8 +245,13 @@ export function initTunnel() {
       m.position.y = Math.sin(d.a + clock.t * 0.05) * d.r + Math.sin(clock.t * 0.8 + d.phase) * d.bob;
     }
     for (const b of billboards) {
-      b.mesh.quaternion.copy(camera.quaternion);                 // always face the camera
-      b.mesh.rotateZ(Math.sin(clock.t * 0.7 + b.phase) * b.sway); // hang and sway a little
+      b.mesh.quaternion.copy(camera.quaternion);                   // face the camera...
+      if (b.coin) {
+        b.mesh.rotateY(clock.t * 1.1 + b.phase);                    // ...except the coin, which keeps turning
+      } else {
+        b.mesh.rotateY(b.tilt + Math.sin(clock.t * 0.5 + b.phase) * 0.08); // ...at a slight angle so the board reads as solid
+        b.mesh.rotateZ(Math.sin(clock.t * 0.7 + b.phase) * b.sway);       // and hangs and sways a little
+      }
       b.mesh.position.y += Math.sin(clock.t * 0.9 + b.phase) * 0.0025;
     }
     motes.rotation.z = clock.t * 0.02;
