@@ -35,7 +35,7 @@ export function initCursor() {
       el.classList.add('is-hover'); zoom(1.45);
     } else { el.classList.remove('is-hover'); zoom(1); }
     // dark ground: inside the fall or the footer
-    const dark = t?.closest ? t.closest('.fall, .bottom, .mcard__back') : null;
+    const dark = t?.closest ? t.closest('.fall, .bottom, .mcard__back, .menu-overlay, .landing--dark') : null;
     el.classList.toggle('is-dark', !!dark);
   }, { passive: true });
 
