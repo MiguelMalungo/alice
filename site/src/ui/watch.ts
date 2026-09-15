@@ -2,8 +2,7 @@ import { gsap } from '../scroll';
 
 /** Opening hours, Europe/Lisbon. [openMin, closeMin] per weekday (0 = Sunday). */
 const HOURS: Record<number, [number, number]> = {
-  1: [510, 1080], 2: [510, 1080], 3: [510, 1080], 4: [510, 1080], // Mon–Thu 8h30–18h00
-  5: [510, 1140], 6: [510, 1140], 0: [510, 1140],                 // Fri–Sun 8h30–19h00
+  0: [510, 1080], 1: [510, 1080], 2: [510, 1080], 3: [510, 1080], 4: [510, 1080], 5: [510, 1080], 6: [510, 1080], // every day 8h30–18h00
 };
 const DAYS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 
