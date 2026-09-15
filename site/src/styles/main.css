@@ -283,7 +283,7 @@ body.no-webgl .fall { height: 60vh; }
 .frame--peek img { aspect-ratio: 3 / 4; }
 .frame.is-rippling img { filter: url(#ripple); }
 .frame--big { position: relative; }
-.frame--wide img { aspect-ratio: 4 / 3; }
+.frame--wide img { aspect-ratio: 7 / 5; transform: none; }
 .frame--door { position: absolute; left: -6%; bottom: -8%; width: 38%; transform: rotate(-4deg); z-index: 2; }
 .frame--door img { aspect-ratio: 3 / 4; }
 .frame--door figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 8px 6px; font-family: var(--display); font-style: italic; font-size: 14px; color: var(--parchment-2); text-align: center; background: linear-gradient(transparent, rgba(30,18,10,.8)); }
