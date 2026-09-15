@@ -447,7 +447,7 @@ body.is-loupe .cursor { opacity: 0; }
 .cafes__foot { position: relative; text-align: center; margin-top: 26px; display: flex; justify-content: center; }
 .textlink--light { color: var(--parchment); border-color: var(--gold); }
 .shelf-wrap { position: relative; margin-top: 30px; }
-.shelf { position: relative; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; cursor: grab; padding: 40px 0 26px; overscroll-behavior-x: contain; }
+.shelf { position: relative; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; cursor: grab; padding: 116px 0 26px; overscroll-behavior-x: contain; }
 .shelf::-webkit-scrollbar { display: none; }
 .shelf.is-dragging { cursor: grabbing; scroll-snap-type: none; }
 .shelf__track { display: flex; align-items: flex-end; gap: clamp(28px, 4vw, 64px); width: max-content; padding: 0 calc(50vw - 130px); }
@@ -459,9 +459,9 @@ body.is-loupe .cursor { opacity: 0; }
 .drink figcaption b { display: block; font-family: var(--display); font-weight: 400; font-size: 22px; color: #F3D27A; line-height: 1.1; }
 .drink figcaption span { display: block; font-family: var(--display); font-style: italic; font-size: 15px; color: var(--parchment); margin-top: 4px; max-width: 24ch; }
 .drink.is-center figcaption { opacity: 1; transform: translateY(0); }
-.shelf__board { position: absolute; left: 0; right: 0; top: 338px; height: 22px; background: linear-gradient(#a3703b, #6b4526 60%, #4a2e18); box-shadow: 0 14px 30px -10px rgba(0,0,0,.8), inset 0 2px 0 rgba(255,220,160,.25); pointer-events: none; }
+.shelf__board { position: absolute; left: 0; right: 0; top: 414px; height: 22px; background: linear-gradient(#a3703b, #6b4526 60%, #4a2e18); box-shadow: 0 14px 30px -10px rgba(0,0,0,.8), inset 0 2px 0 rgba(255,220,160,.25); pointer-events: none; }
 .shelf__board::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 10px; background: linear-gradient(#3a2416, transparent); }
-.shelf-wrap .strip__nav { top: 42%; }
+.shelf-wrap .strip__nav { top: 48%; }
 .shelf-wrap .strip__nav--l { left: clamp(12px, 4vw, 60px); } .shelf-wrap .strip__nav--r { right: clamp(12px, 4vw, 60px); }
 
 /* ---------- Door (Eventos) ---------- */
@@ -602,7 +602,8 @@ body.is-loupe .cursor { opacity: 0; }
   .drink__art { height: 230px; }
   .drink__art img { max-width: 200px; max-height: 230px; }
   .shelf__track { padding: 0 calc(50vw - 100px); }
-  .shelf__board { top: 268px; }
+  .shelf { padding-top: 92px; }
+  .shelf__board { top: 320px; }
   .lantern__crank { right: -14px; width: 46px; height: 46px; }
   .frame--door { width: 44%; }
   .hours { grid-template-columns: 1fr; text-align: center; justify-items: center; }
