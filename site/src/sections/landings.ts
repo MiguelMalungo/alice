@@ -311,7 +311,8 @@ export function initLantern() {
   let i = 0, playing = false, loaded = false;
   let timer: gsap.core.Tween | null = null;
 
-  const load = () => { if (loaded) return; loaded = true; frames.forEach((f) => { if (f.dataset.src) { f.src = f.dataset.src; delete f.dataset.src; } }); };
+  // frames carry real src attributes (the build rewrites those to the deploy base path); nudge decoding early
+  const load = () => { if (loaded) return; loaded = true; frames.forEach((f) => { f.loading = 'eager'; f.decode?.().catch(() => {}); }); };
   const show = (n: number, dir = 1) => {
     const prev = frames[i]; i = (n + frames.length) % frames.length; const next = frames[i];
     count.textContent = `${i + 1} / ${frames.length}`;
