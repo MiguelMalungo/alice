@@ -601,7 +601,8 @@ body.is-loupe .cursor { opacity: 0; }
   .review { padding: 22px; }
   .susan { height: 380px; }
   .topbar { padding: 14px 16px; }
-  .fall { height: 110vh; }
+  .fall { height: 165vh; }
+  .fall--b { height: 140vh; }
   .parch { width: min(100%, 260px); }
   .frame--peek { bottom: -6%; }
   /* menu overlay on phones: the close button in the corner, the tabs on their own row beneath */

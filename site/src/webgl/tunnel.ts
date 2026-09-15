@@ -191,11 +191,15 @@ export function initTunnel() {
     falls.forEach((f, fi) => {
       const top = f.offsetTop, bottom = top + f.offsetHeight;
       const zFrom = zAtScroll(top - innerHeight * 0.2) - 7;      // just ahead of the camera as the window opens
-      const zTo = zAtScroll(bottom - innerHeight * 0.7) - 5;     // still ahead of it as the window closes
+      let zTo = zAtScroll(bottom - innerHeight * 0.7) - 5;       // still ahead of it as the window closes
+      // on phones the window covers a short stretch of tunnel; keep the objects at least 6 units apart
       const mine = billboards.filter((b) => b.fall === fi);
+      const minSpan = 6 * mine.length;
+      if (zFrom - zTo < minSpan) zTo = zFrom - minSpan;
       mine.forEach((b) => {
         const t = (b.slot + 0.5) / mine.length;
-        b.mesh.position.set(Math.cos(b.a) * b.r, Math.sin(b.a) * b.r, zFrom + (zTo - zFrom) * t);
+        const r = innerWidth < 768 ? Math.min(b.r, 2.0) : b.r;   // and closer to the axis, so the narrow view keeps them in frame
+        b.mesh.position.set(Math.cos(b.a) * r, Math.sin(b.a) * r, zFrom + (zTo - zFrom) * t);
       });
     });
   };
