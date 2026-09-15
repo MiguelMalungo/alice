@@ -284,13 +284,14 @@ export function initMenuOverlay() {
   const open = (from?: HTMLElement) => {
     opener = from ?? null;
     overlay.hidden = false;
+    document.body.classList.add('is-menu-open');
     stopScroll();
     gsap.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.35 });
     showPage(from?.dataset.menuPage || 'comida');
     close.focus();
   };
   const shut = () => {
-    document.body.classList.remove('is-loupe'); const lp = document.getElementById('loupe'); if (lp) gsap.to(lp, { opacity: 0, duration: 0.2, overwrite: true });
+    document.body.classList.remove('is-loupe', 'is-menu-open'); const lp = document.getElementById('loupe'); if (lp) gsap.to(lp, { opacity: 0, duration: 0.2, overwrite: true });
     gsap.to(overlay, { opacity: 0, duration: 0.25, onComplete: () => { overlay.hidden = true; startScroll(); opener?.focus(); } });
   };
   document.querySelectorAll<HTMLElement>('[data-menu]').forEach((el) => el.addEventListener('click', (e) => { e.preventDefault(); open(el); }));

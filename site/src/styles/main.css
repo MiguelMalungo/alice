@@ -132,6 +132,7 @@ body.has-cursor .cursor { display: block; }
   mix-blend-mode: normal;
 }
 .topbar > * { pointer-events: auto; }
+body.is-menu-open .topbar, body.is-menu-open .chapters { opacity: 0; pointer-events: none; transition: opacity .25s; }
 .topbar__brand { display: block; opacity: 0; transition: opacity .4s; }
 .topbar__brand img { height: 38px; width: auto; display: block; transition: filter .4s; }
 .topbar.is-scrolled .topbar__brand { opacity: 1; }
@@ -603,6 +604,11 @@ body.is-loupe .cursor { opacity: 0; }
   .fall { height: 110vh; }
   .parch { width: min(100%, 260px); }
   .frame--peek { bottom: -6%; }
+  /* menu overlay on phones: the close button in the corner, the tabs on their own row beneath */
+  .menu-overlay__close { top: 12px; right: 12px; width: 42px; height: 42px; }
+  .menu-overlay__tabs { top: 66px; left: 12px; right: 12px; transform: none; justify-content: center; }
+  .menu-overlay__tab { font-size: 12px; padding: 7px 12px; letter-spacing: .06em; }
+  .menu-overlay__scroll { padding-top: 124px; }
   .polaroid { width: 190px; }
   .strip__track { gap: 20px; }
   .topbar__brand img { height: 30px; }
