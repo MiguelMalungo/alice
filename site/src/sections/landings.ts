@@ -286,7 +286,7 @@ export function initMenuOverlay() {
     overlay.hidden = false;
     stopScroll();
     gsap.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.35 });
-    showPage(from?.dataset.menuPage || 'brunch');
+    showPage(from?.dataset.menuPage || 'comida');
     close.focus();
   };
   const shut = () => {
