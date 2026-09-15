@@ -585,7 +585,18 @@ body.is-loupe .cursor { opacity: 0; }
 }
 @media (max-width: 640px) {
   body { font-size: 16px; }
-  .hero { padding-top: 90px; }
+  /* the whole hero, buttons included, must fit one phone screen: the dive pins it */
+  .hero { padding: 62px 0 28px; min-height: 100svh; }
+  .hero__inner { gap: 6px; }
+  .wordmark { width: min(78%, 40vh); margin-bottom: 0; }
+  .hero__stage { width: min(58%, 24vh, 220px); margin: 0; }
+  .hero__title { font-size: clamp(19px, 5.6vw, 24px); line-height: 1.15; }
+  .hero__lede { font-size: 14.5px; line-height: 1.45; }
+  .hero__q { font-size: 13px; }
+  .ctas { gap: 10px 12px; margin-top: 10px; }
+  .hero .parch { width: 46%; min-width: 150px; }
+  .scrollcue { margin-top: 10px; }
+  .scrollcue i { height: 22px; }
   .menu { grid-template-columns: 1fr 1fr; gap: 10px; }
   .drink { width: 200px; }
   .drink__art { height: 230px; }
