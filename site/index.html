@@ -536,9 +536,13 @@
       <button class="menu-overlay__tab is-active" role="tab" data-page="brunch" aria-selected="true">Alice Brunch</button>
       <button class="menu-overlay__tab" role="tab" data-page="coffee" aria-selected="false">Signature Coffee</button>
     </div>
+    <div class="loupe" id="loupe" aria-hidden="true">
+      <div class="loupe__glass"></div><div class="loupe__rim"></div>
+      <svg class="loupe__chain" viewBox="0 0 64 96"><rect x="48" y="36" width="8" height="6" rx="2" fill="#c4933a" transform="rotate(35 52 39)"/><g fill="none" stroke="#c4933a" stroke-width="1.6" stroke-linecap="round"><path d="M55 44 c 2 8 -6 12 -3 20 s 6 12 2 22"/><circle cx="54.5" cy="86" r="2.4" fill="#c4933a"/></g></svg>
+    </div>
     <div class="menu-overlay__scroll">
       <div class="menu-overlay__page is-active" data-page="brunch">
-        <img class="menu-overlay__img" src="/img/menu.webp" alt="Menu Alice Brunch: Ovos Beneditinos, Panquecas Rainha de Copas, Iogurte Rabbit e uma bebida incluída com bolacha artesanal, 25,50€" width="1024" height="1536" loading="lazy">
+        <img class="menu-overlay__img" id="menuPoster" src="/img/menu.webp" data-cursor="Aproxima a lupa" alt="Menu Alice Brunch: Ovos Beneditinos, Panquecas Rainha de Copas, Iogurte Rabbit e uma bebida incluída com bolacha artesanal, 25,50€" width="1024" height="1536" loading="lazy">
         <p class="menu-overlay__hint">Alice Brunch · 25,50€ · bebida incluída</p>
       </div>
       <div class="menu-overlay__page" data-page="coffee">

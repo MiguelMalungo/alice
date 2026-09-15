@@ -290,9 +290,37 @@ export function initMenuOverlay() {
     close.focus();
   };
   const shut = () => {
+    document.body.classList.remove('is-loupe'); const lp = document.getElementById('loupe'); if (lp) gsap.to(lp, { opacity: 0, duration: 0.2, overwrite: true });
     gsap.to(overlay, { opacity: 0, duration: 0.25, onComplete: () => { overlay.hidden = true; startScroll(); opener?.focus(); } });
   };
   document.querySelectorAll<HTMLElement>('[data-menu]').forEach((el) => el.addEventListener('click', (e) => { e.preventDefault(); open(el); }));
+
+  // the loupe: a big monocle that magnifies the poster under the cursor
+  const loupe = document.getElementById('loupe');
+  const poster = document.getElementById('menuPoster') as HTMLImageElement | null;
+  if (loupe && poster && !isTouch) {
+    const glass = loupe.querySelector<HTMLElement>('.loupe__glass')!;
+    const ZOOM = 2.6;                                  // times the displayed size
+    gsap.set(loupe, { xPercent: -50, yPercent: -50, scale: 0.6, opacity: 0 });
+    const lx = gsap.quickTo(loupe, 'x', { duration: 0.18, ease: 'power3' });
+    const ly = gsap.quickTo(loupe, 'y', { duration: 0.18, ease: 'power3' });
+    const showLoupe = () => { loupe.classList.add('is-on'); document.body.classList.add('is-loupe'); gsap.to(loupe, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(1.6)', overwrite: true }); };
+    const hideLoupe = () => { loupe.classList.remove('is-on'); document.body.classList.remove('is-loupe'); gsap.to(loupe, { opacity: 0, scale: 0.6, duration: 0.25, ease: 'power2.in', overwrite: true }); };
+    glass.style.backgroundImage = `url("${poster.currentSrc || poster.src}")`;
+    poster.addEventListener('load', () => { glass.style.backgroundImage = `url("${poster.currentSrc || poster.src}")`; });
+    const move = (e: PointerEvent) => {
+      const r = poster.getBoundingClientRect();
+      const u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
+      const bw = r.width * ZOOM, bh = r.height * ZOOM, D = loupe.offsetWidth;
+      glass.style.backgroundSize = `${bw}px ${bh}px`;
+      glass.style.backgroundPosition = `${D / 2 - u * bw}px ${D / 2 - v * bh}px`;
+      lx(e.clientX); ly(e.clientY);
+    };
+    poster.addEventListener('pointerenter', (e) => { gsap.set(loupe, { x: e.clientX, y: e.clientY }); move(e); showLoupe(); });
+    poster.addEventListener('pointermove', move);
+    poster.addEventListener('pointerleave', hideLoupe);
+    close.addEventListener('click', hideLoupe);
+  }
   tabs.forEach((t) => t.addEventListener('click', () => showPage(t.dataset.page!)));
   close.addEventListener('click', shut);
   overlay.addEventListener('click', (e) => { if (e.target === overlay || e.target === scroll) shut(); });
