@@ -361,9 +361,9 @@ body.no-webgl .fall { height: 60vh; }
 }
 
 /* ---------- Menu overlay ---------- */
-.menu-overlay { position: fixed; inset: 0; z-index: 86; background: rgba(21, 14, 9, .88); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); display: grid; }
+.menu-overlay { position: fixed; inset: 0; z-index: 86; background: rgba(21, 14, 9, .88); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); display: grid; grid-template-rows: minmax(0, 1fr); }
 .menu-overlay[hidden] { display: none; }
-.menu-overlay__scroll { overflow-y: auto; padding: 48px 20px 40px; display: flex; flex-direction: column; align-items: center; gap: 14px; overscroll-behavior: contain; }
+.menu-overlay__scroll { height: 100%; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 84px 20px 60px; display: flex; flex-direction: column; align-items: center; gap: 14px; overscroll-behavior: contain; }
 .menu-overlay__img { width: min(92vw, 560px); height: auto; border: 8px solid var(--parchment); outline: 1px solid var(--parchment-edge); border-radius: 10px; box-shadow: 0 40px 80px -30px rgba(0,0,0,.8); }
 .menu-overlay__hint { font-family: var(--sc); letter-spacing: .12em; font-size: 13px; color: var(--parchment); }
 .menu-overlay__tabs { position: fixed; top: 22px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; gap: 6px; background: rgba(240,221,179,.14); border: 1px solid rgba(201,169,106,.5); border-radius: 999px; padding: 4px; }
@@ -385,7 +385,7 @@ body.no-webgl .fall { height: 60vh; }
 }
 .menu-overlay__close:hover { transform: rotate(90deg) scale(1.08); }
 /* the typeset menu */
-.mnu { width: min(94vw, 980px); margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; color: var(--ink); }
+.mnu { width: min(94vw, 980px); margin-top: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; color: var(--ink); }
 .mnu__sec { background: var(--parchment-2); border: 1px solid var(--parchment-edge); border-radius: 14px; padding: 18px 20px 14px; box-shadow: inset 0 0 0 5px var(--parchment-2), inset 0 0 0 6px var(--parchment-edge), 0 30px 60px -40px rgba(0,0,0,.8);
   background-image: radial-gradient(ellipse at 15% 0%, rgba(201,169,106,.22), transparent 55%); }
 .mnu__sec--wide { grid-column: 1 / -1; }
